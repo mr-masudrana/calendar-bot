@@ -1,32 +1,26 @@
-import os
 import json
 from telegram import Bot, Update
 from telegram.ext import Dispatcher, CommandHandler, CallbackContext
 from bot_utils import build_message
-from dotenv import load_dotenv
-
-load_dotenv()
+import os
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-bot = Bot(token=BOT_TOKEN)
 
+bot = Bot(token=BOT_TOKEN)
 dispatcher = Dispatcher(bot, None, workers=0)
 
-# /today command handler
-def today_cmd(update: Update, context: CallbackContext):
+# /today command
+def today(update: Update, context: CallbackContext):
     from datetime import datetime
     import pytz
     tz = pytz.timezone("Asia/Dhaka")
-    today = datetime.now(tz).date()
-
-    update.effective_chat
-    msg = build_message(today)
+    msg = build_message(datetime.now(tz).date())
     update.message.reply_text(msg)
 
-dispatcher.add_handler(CommandHandler("today", today_cmd))
+dispatcher.add_handler(CommandHandler("today", today))
 
 
-# Vercel handler
+# Vercel Python Handler (VERY IMPORTANT)
 def handler(request):
     try:
         body = request.get_json()
@@ -35,7 +29,13 @@ def handler(request):
             update = Update.de_json(body, bot)
             dispatcher.process_update(update)
 
-        return {"statusCode": 200, "body": "OK"}
+        return {
+            "statusCode": 200,
+            "body": "OK"
+        }
 
     except Exception as e:
-        return {"statusCode": 500, "body": str(e)}
+        return {
+            "statusCode": 500,
+            "body": str(e)
+        }
