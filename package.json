@@ -1,0 +1,9 @@
+{
+  "name": "calendar-bot",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "bangla-date": "^1.0.4",
+    "moment-timezone": "^0.5.45"
+  }
+}
